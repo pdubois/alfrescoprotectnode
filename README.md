@@ -2,6 +2,20 @@
 Alfresco module allowing protection of Alfresco “well known” nodes against accidental delete.
 The module adds the aspect "sys:undeletable" to the "well know" nodes.
 
+## Building the module:
+
+```
+mkdir work
+cd work
+git clone https://github.com/pdubois/alfrescoprotectnode.git
+cd alfrescoprotectnode/protectnodes
+mvn install
+chmod +x run.sh
+```
+
+## Outcome:
+The module "protectnodes.amp" is generated under "target" folder.
+
 ## Module options:
 How to specify the list of nodes that will be protected against deletion?
 
