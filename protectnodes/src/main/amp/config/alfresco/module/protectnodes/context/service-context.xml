@@ -28,7 +28,7 @@
 		<property name="nodeLocatorService" ref="nodeLocatorService" />
 		<!--  property name="executeOnceOnly" value="false" / -->
 		<property name="undeletableList">
-			<list>
+			<set>
 				<value>/app:company_home/app:dictionary</value>
 				<value>/app:company_home/app:guest_home</value>
 				<value>/app:company_home/app:user_homes</value>
@@ -36,8 +36,14 @@
 				<value>/app:company_home/cm:Imap_x0020_Attachments</value>
 				<value>/app:company_home/cm:Imap_x0020_Home</value>
 				<value>/app:company_home/st:sites</value>
-			</list>
+			</set>
 		</property>
+		<property name="deletableList">
+            <set>
+                <!-- value>/app:company_home/app:dictionary</value>
+                <value>/app:company_home/app:guest_home</value -->
+            </set>
+        </property>
 		<property name="transactionService" ref="TransactionService" />
 		<property name="searchService" ref="SearchService" />
 		<property name="namespacePrefixResolver">

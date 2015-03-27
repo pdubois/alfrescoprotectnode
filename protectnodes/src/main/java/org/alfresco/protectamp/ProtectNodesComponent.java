@@ -19,6 +19,7 @@ package org.alfresco.protectamp;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.module.AbstractModuleComponent;
@@ -34,11 +35,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * A basic component that will be started for this module. Uses the NodeLocatorService to easily find nodes and the
- * NodeService to display them
+ * Component that is adding or removing "undeletable" aspect following sets of nodes in
  * 
- * @author Gabriele Columbro
- * @author Maurizio Pillitu
+ * @author Philippe Dubois
  */
 public class ProtectNodesComponent extends AbstractModuleComponent
 {
@@ -46,15 +45,22 @@ public class ProtectNodesComponent extends AbstractModuleComponent
 
     private NodeService nodeService;
 
-    private List<String> undeletableList;
+    private Set<String> undeletableList;
+
+    private Set<String> deletableList;
 
     private NodeLocatorService nodeLocatorService;
 
     private TransactionService transactionService;
-    
+
     private SearchService searchService;
-    
+
     private NamespaceService namespacePrefixResolver;
+
+    public void setDeletableList(Set<String> deletableList)
+    {
+        this.deletableList = deletableList;
+    }
 
     public void setNamespacePrefixResolver(NamespaceService namespacePrefixResolver)
     {
@@ -76,7 +82,7 @@ public class ProtectNodesComponent extends AbstractModuleComponent
         this.transactionService = transactionService;
     }
 
-    public void setUndeletableList(List<String> undeletableList)
+    public void setUndeletableList(Set<String> undeletableList)
     {
         this.undeletableList = undeletableList;
     }
@@ -92,12 +98,12 @@ public class ProtectNodesComponent extends AbstractModuleComponent
     }
 
     public void init()
-    { 
-        //calling super.init() insure registering the component
+    {
+        // calling super.init() insure registering the component
         super.init();
         log.info("Init called in Prote");
     }
-    
+
     /**
      * Bogus component execution
      */
@@ -115,7 +121,7 @@ public class ProtectNodesComponent extends AbstractModuleComponent
                     {
 
                         TransactionService fTransactionService = transactionService;
-                        final RetryingTransactionCallback<Object> emptyBinWork = new RetryingTransactionCallback<Object>()
+                        final RetryingTransactionCallback<Object> protectWork = new RetryingTransactionCallback<Object>()
                             {
                                 public Object execute() throws Exception
                                 {
@@ -123,10 +129,12 @@ public class ProtectNodesComponent extends AbstractModuleComponent
                                     params.put("query", fPathNode);
                                     params.put("store_type", "workspace");
                                     params.put("store_id", "SpacesStore");
-                                    //NodeRef nodeToProtect = nodeLocatorService.getNode("xpath", null, params);
-                                    List<NodeRef> list = searchService.selectNodes(getCompanyHome(), fPathNode, null, namespacePrefixResolver, false);
+                                    // NodeRef nodeToProtect = nodeLocatorService.getNode("xpath", null, params);
+                                    List<NodeRef> list = searchService.selectNodes(getCompanyHome(), fPathNode, null,
+                                            namespacePrefixResolver, false);
                                     NodeRef nodeToProtect = list.get(0);
-                                    log.info("********************DemoComponent has been executed " + nodeToProtect + " " + fPathNode);
+                                    log.info("********************DemoComponent has been executed protect " + nodeToProtect
+                                            + " " + fPathNode);
                                     if (!nodeService.hasAspect(nodeToProtect, ContentModel.ASPECT_UNDELETABLE))
                                     {
                                         log.info("Aspect Undeletable added:" + fPathNode);
@@ -135,13 +143,51 @@ public class ProtectNodesComponent extends AbstractModuleComponent
                                     return null;
                                 }
                             };
-                        fTransactionService.getRetryingTransactionHelper().doInTransaction(emptyBinWork, false, true);
-
+                        fTransactionService.getRetryingTransactionHelper().doInTransaction(protectWork, false, true);
                         return null;
 
                     }
-                }, AuthenticationUtil.getSystemUserName());
 
+                }, AuthenticationUtil.getSystemUserName());
+        }
+        
+        for (String pathNode : deletableList)
+        {
+            final String fPathNode = pathNode;
+            AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>()
+                {
+                    public Object doWork() throws Exception
+                    {
+
+                        TransactionService fTransactionService = transactionService;
+                        final RetryingTransactionCallback<Object> unProtectWork = new RetryingTransactionCallback<Object>()
+                            {
+                                public Object execute() throws Exception
+                                {
+                                    HashMap<String, Serializable> params = new HashMap<String, Serializable>();
+                                    params.put("query", fPathNode);
+                                    params.put("store_type", "workspace");
+                                    params.put("store_id", "SpacesStore");
+                                    // NodeRef nodeToProtect = nodeLocatorService.getNode("xpath", null, params);
+                                    List<NodeRef> list = searchService.selectNodes(getCompanyHome(), fPathNode, null,
+                                            namespacePrefixResolver, false);
+                                    NodeRef nodeToUnProtect = list.get(0);
+                                    log.info("********************DemoComponent has been executed unprotect " + nodeToUnProtect
+                                            + " " + fPathNode);
+                                    if (nodeService.hasAspect(nodeToUnProtect, ContentModel.ASPECT_UNDELETABLE))
+                                    {
+                                        log.info("Aspect Undeletable removed:" + fPathNode);
+                                        nodeService.removeAspect(nodeToUnProtect, ContentModel.ASPECT_UNDELETABLE);
+                                    }
+                                    return null;
+                                }
+                            };
+                        fTransactionService.getRetryingTransactionHelper().doInTransaction(unProtectWork, false, true);
+                        return null;
+
+                    }
+
+                }, AuthenticationUtil.getSystemUserName());
         }
     }
 

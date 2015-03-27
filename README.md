@@ -20,6 +20,7 @@ The module "protectnodes.amp" is generated under "target" folder.
 How to specify the list of nodes that will be protected against deletion?
 
 You need to specify it in  `protectnodes/src/main/amp/config/alfresco/module/protectnodes/context/service-context.xml` configuring the path of all the nodes you need to protect.
+You can also specify a set of nodes that needs to be unprotected in `deletableList`.
 
 Example, see property undeletableList for the list of nodes to be protected:
 
@@ -36,16 +37,22 @@ Example, see property undeletableList for the list of nodes to be protected:
 		<property name="nodeLocatorService" ref="nodeLocatorService" />
 		<!--  property name="executeOnceOnly" value="false" / -->
 		<property name="undeletableList">
-			<list>
-				<value>/app:company_home/app:dictionary</value>
-				<value>/app:company_home/app:guest_home</value>
+			<set>
+				<!-- value>/app:company_home/app:dictionary</value>
+				<value>/app:company_home/app:guest_home</value -->
 				<value>/app:company_home/app:user_homes</value>
 				<value>/app:company_home/app:shared</value>
 				<value>/app:company_home/cm:Imap_x0020_Attachments</value>
 				<value>/app:company_home/cm:Imap_x0020_Home</value>
 				<value>/app:company_home/st:sites</value>
-			</list>
+			</set>
 		</property>
+		<property name="deletableList">
+            <set>
+                <value>/app:company_home/app:dictionary</value>
+                <value>/app:company_home/app:guest_home</value>
+            </set>
+        </property>
 		<property name="transactionService" ref="TransactionService" />
 		<property name="searchService" ref="SearchService" />
 		<property name="namespacePrefixResolver">
