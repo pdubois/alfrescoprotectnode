@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -98,8 +100,38 @@ public class DemoComponentTest
         Set<String> deletableList = new HashSet<String>(10);
         deletableList.add("/app:company_home/app:dictionary");
         deletableList.add("/app:company_home/app:guest_home");
-        demoComponent.setExecuteOnceOnly(false);
-        demoComponent.execute();
+        demoComponent.setDeletableList(deletableList);
+        //demoComponent.setExecuteOnceOnly(false);
+        Class targetClass = demoComponent.getClass();
+        Method method;
+        try
+        {
+            method = targetClass.getDeclaredMethod("executeInternal", null);
+            method.setAccessible(true);
+            method.invoke(demoComponent, null);
+        }
+        catch (NoSuchMethodException | SecurityException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        //demoComponent.execute();
 
         for (String pathNode : undeletableList)
         {

@@ -26,7 +26,7 @@
 		<property name="appliesFromVersion" value="1.0" />
 		<property name="nodeService" ref="NodeService" />
 		<property name="nodeLocatorService" ref="nodeLocatorService" />
-		<!--  property name="executeOnceOnly" value="false" / -->
+		<property name="executeOnceOnly"><value>false</value></property>
 		<property name="undeletableList">
 			<set>
 				<value>/app:company_home/app:dictionary</value>
