@@ -74,6 +74,11 @@
             <artifactId>alfresco-repository</artifactId>
         </dependency>
     </dependencies>
+    <scm>
+	<url>https://github.com/pdubois/alfrescoprotectnode</url>
+	<connection>scm:git:git://github.com/pdubois/alfrescoprotectnode.git</connection>
+	<developerConnection>scm:git:git@github.com:pdubois/alfrescoprotectnode.git</developerConnection>
+    </scm>
     
     <profiles>
     	<!-- Enterprise profile, manually activated, automatically adds support for Enterprise edition development (dependencies) -->
