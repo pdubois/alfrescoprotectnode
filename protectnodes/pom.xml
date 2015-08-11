@@ -79,7 +79,18 @@
 	<connection>scm:git:https://github.com/pdubois/alfrescoprotectnode.git</connection>
 	<developerConnection>scm:git:git@github.com:pdubois/alfrescoprotectnode.git</developerConnection>
     </scm>
-    
+    <distributionManagement>
+      <repository>
+     		<id>deployment</id>
+     		<name>Internal Releases</name>
+     		<url>http://192.168.180.171:8081/nexus/content/repositories/releases/</url>
+  	</repository>
+  	<snapshotRepository>
+     		<id>deployment</id>
+     		<name>Internal Releases</name>
+     		<url>http://192.168.180.171:8081/nexus/content/repositories/snapshots/</url>
+  	</snapshotRepository>
+    </distributionManagement>   
     <profiles>
     	<!-- Enterprise profile, manually activated, automatically adds support for Enterprise edition development (dependencies) -->
         <profile>
