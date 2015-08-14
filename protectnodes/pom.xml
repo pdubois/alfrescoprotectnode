@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.pdubois</groupId>
     <artifactId>protectnodes</artifactId>
-    <version>2.8-SNAPSHOT</version>
+    <version>2.10-SNAPSHOT</version>
     <name>protectnodes Repository AMP project</name>
     <packaging>amp</packaging>
     <description>Manages the lifecycle of the protectnodes Repository AMP (Alfresco Module Package)</description>
@@ -80,7 +80,7 @@
       <tag>HEAD</tag>
   </scm>
     <distributionManagement>
-      <repository>
+      	<!-- repository>
      		<id>deployment</id>
      		<name>Internal Releases</name>
      		<url>http://192.168.180.171:8081/content/repositories/releases/</url>
@@ -89,8 +89,18 @@
      		<id>deployment</id>
      		<name>Internal Releases</name>
      		<url>http://192.168.180.171:8081/content/repositories/snapshots/</url>
+  	</snapshotRepository -->
+      	<repository>
+     		<id>deployment-external</id>
+     		<name>External Releases</name>
+     		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+  	</repository>
+  	<snapshotRepository>
+     		<id>deployment-external</id>
+     		<name>External Releases</name>
+     		<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
   	</snapshotRepository>
-    </distributionManagement>   
+    	</distributionManagement>   
     <profiles>
     	<!-- Enterprise profile, manually activated, automatically adds support for Enterprise edition development (dependencies) -->
         <profile>
