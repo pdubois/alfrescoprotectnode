@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.pdubois</groupId>
     <artifactId>protectnodes</artifactId>
-    <version>2.13-SNAPSHOT</version>
+    <version>2.13</version>
     <name>protectnodes Repository AMP project</name>
     <packaging>amp</packaging>
     <description>Manages the lifecycle of the protectnodes Repository AMP (Alfresco Module Package)</description>
@@ -77,7 +77,7 @@
 	<url>https://github.com/pdubois/alfrescoprotectnode</url>
 	<connection>scm:git:https://github.com/pdubois/alfrescoprotectnode.git</connection>
 	<developerConnection>scm:git:https://github.com/pdubois/alfrescoprotectnode.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>protectnodes-2.13</tag>
   </scm>
     <distributionManagement>
       	<!-- repository>
