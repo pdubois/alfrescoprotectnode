@@ -1,0 +1,9 @@
+test:
+  override:
+  - mvn integration-test
+
+machine:
+  timezone:
+    America/Los_Angeles
+  java:
+    version: oraclejdk8
